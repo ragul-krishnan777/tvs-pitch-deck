@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TVS Capital Funds — TSGF 4 Pitch Deck</title>
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fbf9f5 0%, #e2e8f0 100%);
+      --card-bg: rgba(255, 255, 255, 0.94);
+      --card-border: rgba(203, 213, 225, 0.7);
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --accent-slate: #334155;
+      --pastel-teal: #0d9488;
+      --pastel-green-bg: #dcfce7;
+      --pastel-blue-bg: #e0f2fe;
+      --shadow-md: 0 12px 32px rgba(15, 23, 42, 0.06);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Background Particle Canvas */
+    #particleCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Main Container */
+    .deck-container {
+      width: 100%;
+      max-width: 1100px;
+      height: 92vh;
+      max-height: 660px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .deck-header {
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.6);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      background: #e2e8f0;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      color: var(--accent-slate);
+      font-weight: 700;
+    }
+
+    .analyst-tag {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .slide-indicator {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-slate);
+      background: #f1f5f9;
+      padding: 4px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+
+    /* Slide Viewport */
+    .slide-viewport {
+      flex: 1;
+      position: relative;
+      padding: 24px 28px;
+      overflow-y: auto;
+    }
+
+    .slide {
+      display: none;
+      height: 100%;
+      flex-direction: column;
+      justify-content: flex-start;
+      animation: fadeIn 0.3s ease-in-out forwards;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Typography */
+    .slide-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .slide-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      font-weight: 500;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    /* Cards */
+    .card {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+    }
+
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .card-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .tag-blue { background: #e0f2fe; color: #0369a1; }
+    .tag-orange { background: #ffedd5; color: #c2410c; }
+    .tag-green { background: #dcfce7; color: #15803d; }
+
+    .card-text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .metric-value {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Chart Box */
+    .chart-box {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      height: 230px;
+      position: relative;
+    }
+
+    .toggle-container {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .toggle-btn {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      background: #f8fafc;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .toggle-btn.active {
+      background: var(--accent-slate);
+      color: white;
+      border-color: var(--accent-slate);
+    }
+
+    .chart-legend-note {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* Interactive Estimator */
+    .estimator-box {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .slider-control {
+      width: 100%;
+      height: 6px;
+      border-radius: 4px;
+      background: #cbd5e1;
+      outline: none;
+      margin: 12px 0;
+      accent-color: var(--pastel-teal);
+    }
+
+    .tier-badge-card {
+      background: var(--pastel-blue-bg);
+      border-left: 4px solid #0284c7;
+      border-radius: 8px;
+      padding: 10px 14px;
+      transition: all 0.3s ease;
+    }
+
+    .tier-badge-card.preferred {
+      background: var(--pastel-green-bg);
+      border-left-color: #16a34a;
+    }
+
+    /* Cover Slide */
+    .title-slide {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 10px 20px;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      background: #ffedd5;
+      color: #c2410c;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .title-hero {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .title-subhero {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      max-width: 600px;
+    }
+
+    .author-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--card-border);
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      color: var(--text-main);
+      margin-top: 10px;
+    }
+
+    /* Footer */
+    .deck-footer {
+      padding: 12px 28px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.6);
+      flex-shrink: 0;
+    }
+
+    .btn {
+      background: var(--accent-slate);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn:hover { background: #0f172a; }
+    .btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+    .dots { display: flex; gap: 8px; }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .dot.active { background: var(--accent-slate); transform: scale(1.25); }
+  </style>
+</head>
+<body>
+
+  <!-- Slow Smooth Particle Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <div class="deck-container">
+    <div class="deck-header">
+      <div class="brand-title">
+        TVS CAPITAL FUNDS
+        <span class="brand-badge">TSGF 4</span>
+        <span class="analyst-tag">| Ragul Krishnan (Aspiring Business Development Analyst)</span>
+      </div>
+      <div class="slide-indicator" id="slideIndicator">Slide 1 of 7</div>
+    </div>
+
+    <div class="slide-viewport">
+
+      <!-- SLIDE 1 -->
+      <div class="slide active title-slide">
+        <span class="badge-pill">Growth Equity Partnership • TSGF 4</span>
+        <h1 class="title-hero">Designed for India.<br>Built on Trust.</h1>
+        <p class="title-subhero">A Premier Rupee-Denominated Growth Equity Partnership for Discerning Institutional Investors</p>
+
+        <div class="grid-3" style="width: 100%; max-width: 900px; text-align: left; margin-bottom: 14px;">
+          <div class="card">
+            <div class="card-header-flex">
+              <span class="card-title">Pioneer Positioning</span>
+              <span class="card-tag tag-blue">Mid-Market</span>
+            </div>
+            <div class="card-text">Rupee-denominated growth equity partnering with revenue-generating mid-market Indian enterprises.</div>
+          </div>
+          <div class="card">
+            <div class="card-header-flex">
+              <span class="card-title">Trusted Backing</span>
+              <span class="card-tag tag-orange">Conglomerates</span>
+            </div>
+            <div class="card-text">Backed by two of India's most trusted business conglomerates — TVS Group & Shriram Group.</div>
+          </div>
+          <div class="card">
+            <div class="card-header-flex">
+              <span class="card-title">Current Opportunity</span>
+              <span class="card-tag tag-green">Fund IV</span>
+            </div>
+            <div class="card-text">Presenting TVS Shriram Growth Fund 4 (TSGF 4) targeting ₹3,000 Cr (~$360M) corpus.</div>
+          </div>
+        </div>
+
+        <div class="author-pill">
+          <span>Prepared by:</span> <strong>Ragul Krishnan</strong> — Aspiring Business Development Analyst, TVS Capital Funds
+        </div>
+      </div>
+
+      <!-- SLIDE 2 -->
+      <div class="slide">
+        <h2 class="slide-title">Who We Are & The TVS-Shriram Advantage</h2>
+        <p class="slide-subtitle">Deep Roots, Proprietary Sourcing & Capability Capital</p>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title" style="margin-bottom: 8px;">Proprietary Deal Flow</div>
+            <div class="card-text">Direct off-market deal sourcing leveraged through the extensive TVS and Shriram business networks across Tier-1, Tier-2, and Tier-3 India.</div>
+          </div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom: 8px;">100% Domestic Capital</div>
+            <div class="card-text">Capital raised from leading domestic institutions (SIDBI, NABARD, HDFC Life, SBI Life) and premier Indian Family Offices.</div>
+          </div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom: 8px;">Capability Capital</div>
+            <div class="card-text">Hands-on active partnering providing board representation, governance, operational scaling, and strategic mentoring.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3 -->
+      <div class="slide">
+        <h2 class="slide-title">Track Record & Financial Performance</h2>
+        <p class="slide-subtitle">Demonstrating Consistent Execution Across Market Cycles</p>
+        
+        <div class="grid-2" style="margin-bottom: 12px;">
+          <div class="chart-box">
+            <div class="toggle-container">
+              <button class="toggle-btn active" id="btnIrr" onclick="switchChart('irr')">Net IRR (%)</button>
+              <button class="toggle-btn" id="btnCorpus" onclick="switchChart('corpus')">Corpus Scaling (₹ Cr)</button>
+            </div>
+            <div style="height: 145px; position: relative;">
+              <canvas id="performanceChart"></canvas>
+            </div>
+            <div class="chart-legend-note" id="chartLegendNote">
+              ℹ️ TSGF 3 (2018): Active fund, NET IRR is not yet disclosed
+            </div>
+          </div>
+
+          <div class="grid-3" style="grid-template-columns: 1fr; gap: 8px;">
+            <div class="card" style="padding: 10px 14px;">
+              <div class="metric-value">₹3,103 Cr</div>
+              <div class="metric-label">Cumulative Capital Raised across Funds I, II, & III</div>
+            </div>
+            <div class="card" style="padding: 10px 14px;">
+              <div class="metric-value">₹3,000 Cr</div>
+              <div class="metric-label">Target Corpus for Fund IV (TSGF 4)</div>
+            </div>
+            <div class="card" style="padding: 10px 14px;">
+              <div class="metric-value">₹6,103 Cr</div>
+              <div class="metric-label">Total Capital Managed & Target</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card" style="padding: 10px 14px;">
+            <div class="card-title" style="font-size: 0.85rem;">RBL Bank Realization</div>
+            <div class="card-text" style="font-size: 0.78rem;">Delivered 30%+ IRR on single-deal realization through strategic growth & governance.</div>
+          </div>
+          <div class="card" style="padding: 10px 14px;">
+            <div class="card-title" style="font-size: 0.85rem;">Nykaa Early Growth Backer</div>
+            <div class="card-text" style="font-size: 0.78rem;">Early growth-stage backer culminating in a marquee public listing (IPO).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4 -->
+      <div class="slide">
+        <h2 class="slide-title">Thesis Evolution & Sector Focus</h2>
+        <p class="slide-subtitle">Narrowing Focus to High-Conviction Engines of Growth</p>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">TSGF 4 Core Sector Focus</div>
+            <div class="card-text">
+              <ul style="margin-left: 18px; margin-top: 8px; line-height: 1.6;">
+                <li>Financial Services (NBFCs, Credit Platforms)</li>
+                <li>Tech-Driven Fintech & Insurtech</li>
+                <li>Tech-for-Finance & Enterprise B2B SaaS</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">The "AAA" Founder Evaluation Model</div>
+            <div class="card-text">
+              <ul style="margin-left: 18px; margin-top: 8px; line-height: 1.6;">
+                <li><strong>Ambition:</strong> Scale multi-decadal companies</li>
+                <li><strong>Ability:</strong> Attract & retain top tier talent</li>
+                <li><strong>Execution:</strong> Operational discipline & strict governance</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5 -->
+      <div class="slide">
+        <h2 class="slide-title">Key Portfolio Success Stories</h2>
+        <p class="slide-subtitle">Partnering with Category Leaders in India's Tech & Finance Landscape</p>
+        <div class="grid-4">
+          <div class="card">
+            <div class="card-title">PhonePe</div>
+            <div class="card-text">India's market leader in digital payments processing over 150M+ daily transactions.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Digit Insurance</div>
+            <div class="card-text">Tech-first insurtech revolutionizing retail coverages.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Vivriti Capital & Yubi</div>
+            <div class="card-text">Enterprise debt liquidity platform ecosystem.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">InsuranceDekho</div>
+            <div class="card-text">Insurtech distribution across 1,300+ pincodes.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 6 -->
+      <div class="slide">
+        <h2 class="slide-title">Leadership Team & Capability</h2>
+        <p class="slide-subtitle">Veteran Industry Leadership & Institutional Governance</p>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title">Gopal Srinivasan</div>
+            <div class="card-text" style="margin-top: 4px;"><strong>Founder & Chairman</strong><br>3rd generation TVS family entrepreneur with 30+ years of PE experience.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Anuradha Ramachandran</div>
+            <div class="card-text" style="margin-top: 4px;"><strong>Managing Partner</strong><br>22+ years across VC, investment banking, and fintech.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Gaurav Sekhri</div>
+            <div class="card-text" style="margin-top: 4px;"><strong>Partner</strong><br>Leads B2B software, supply chain, and tech investments.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 7 -->
+      <div class="slide">
+        <h2 class="slide-title">Investment Opportunity — Fund IV</h2>
+        <p class="slide-subtitle">Partner with TVS Capital Funds for TSGF 4</p>
+        <div class="grid-2">
+          
+          <div class="card">
+            <div class="card-title" style="margin-bottom: 8px;">Fund Structure & Key Terms</div>
+            <div class="card-text" style="line-height: 1.8;">
+              <p><strong>Vehicle:</strong> TVS Shriram Growth Fund 4</p>
+              <p><strong>Structure:</strong> Category II AIF (SEBI Registered)</p>
+              <p><strong>Target Corpus:</strong> ₹3,000 Cr (~$360M)</p>
+              <p><strong>Minimum Commitment:</strong> ₹1 Cr (SEBI Norms)</p>
+            </div>
+          </div>
+
+          <div class="estimator-box">
+            <div class="card-title">LP Commitment Privilege Estimator</div>
+            <p class="card-text">Adjust commitment amount to view LP privilege tier:</p>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+              <span style="font-size: 0.82rem; font-weight: 600;">Commitment Amount:</span>
+              <span id="sliderValue" style="font-size: 1rem; font-weight: 800; color: #0284c7;">₹5 Cr</span>
+            </div>
+
+            <input type="range" min="1" max="15" value="5" step="0.5" class="slider-control" id="commitmentSlider">
+
+            <div class="tier-badge-card preferred" id="tierCard">
+              <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;" id="tierHeader">
+                CO-INVESTMENT RIGHTS TIER
+              </div>
+              <div style="font-size: 0.85rem; font-weight: 700; margin-top: 2px;" id="tierTitle">
+                Tier 2 LP Preferred Co-Investment Allocation
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="deck-footer">
+      <button class="btn" id="prevBtn" onclick="changeSlide(-1)" disabled>Previous</button>
+      <div class="dots" id="dotsContainer"></div>
+      <button class="btn" id="nextBtn" onclick="changeSlide(1)">Next</button>
+    </div>
+  </div>
+
+  <script>
+    /* SLIDE NAVIGATION */
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const indicator = document.getElementById('slideIndicator');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    slides.forEach((_, idx) => {
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      if (idx === 0) dot.classList.add('active');
+      dot.onclick = () => goToSlide(idx);
+      dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateDeck() {
+      slides.forEach((slide, idx) => slide.classList.toggle('active', idx === currentSlide));
+      dots.forEach((dot, idx) => dot.classList.toggle('active', idx === currentSlide));
+      indicator.innerText = `Slide ${currentSlide + 1} of ${totalSlides}`;
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === totalSlides - 1;
+    }
+
+    function changeSlide(direction) {
+      currentSlide = Math.max(0, Math.min(totalSlides - 1, currentSlide + direction));
+      updateDeck();
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateDeck();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') changeSlide(1);
+      if (e.key === 'ArrowLeft') changeSlide(-1);
+    });
+
+    /* INTERACTIVE SLIDER */
+    const slider = document.getElementById('commitmentSlider');
+    const sliderValue = document.getElementById('sliderValue');
+    const tierCard = document.getElementById('tierCard');
+    const tierTitle = document.getElementById('tierTitle');
+
+    slider.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      sliderValue.innerText = `₹${val} Cr`;
+
+      if (val >= 5) {
+        tierCard.classList.add('preferred');
+        tierTitle.innerText = "Tier 2 LP Preferred Co-Investment Allocation";
+      } else {
+        tierCard.classList.remove('preferred');
+        tierTitle.innerText = "Tier 1 Standard LP Participation";
+      }
+    });
+
+    /* CHART SETUP WITH EXPLICIT ACTIVE FUND / DISCLOSED NOTE */
+    let chartInstance = null;
+
+    const chartConfigs = {
+      irr: {
+        labels: ['TSGF 1A (2008)', 'TSGF 1B / Fund II', 'TSGF 3 (2018)'],
+        data: [1.0, 16.6, 0.0],
+        colors: ['#cbd5e1', '#0d9488', '#f1f5f9'],
+        yMax: 20,
+        unit: '%',
+        note: 'ℹ️ TSGF 3 (2018): Active fund, NET IRR is not yet disclosed',
+        tooltip: (context) => {
+          if (context.dataIndex === 2) {
+            return 'Active fund, NET IRR is not yet disclosed';
+          }
+          return `Net IRR: ${context.raw}%`;
+        }
+      },
+      corpus: {
+        labels: ['Fund 1A (2008)', 'Fund 2B (2012)', 'Fund III (2018)', 'Fund IV (Target)'],
+        data: [585, 600, 1918, 3000],
+        colors: ['#cbd5e1', '#94a3b8', '#0284c7', '#0d9488'],
+        yMax: 3500,
+        unit: ' Cr',
+        note: '📊 Corpus Values in ₹ Crores',
+        tooltip: (context) => `Corpus: ₹${context.raw} Cr`
+      }
+    };
+
+    function renderChart(type) {
+      const ctx = document.getElementById('performanceChart').getContext('2d');
+      const cfg = chartConfigs[type];
+      document.getElementById('chartLegendNote').innerText = cfg.note;
+
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: cfg.labels,
+          datasets: [{
+            data: cfg.data,
+            backgroundColor: cfg.colors,
+            borderRadius: 6,
+            borderWidth: 1,
+            borderColor: 'rgba(0,0,0,0.06)'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: cfg.tooltip
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: cfg.yMax,
+              grid: { color: 'rgba(203, 213, 225, 0.4)' },
+              ticks: { callback: (val) => val + cfg.unit }
+            },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    function switchChart(type) {
+      document.getElementById('btnIrr').classList.toggle('active', type === 'irr');
+      document.getElementById('btnCorpus').classList.toggle('active', type === 'corpus');
+      renderChart(type);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderChart('irr');
+    });
+
+    /* SLOW-MOTION MAGNETIC GRAVITY CANVAS */
+    const canvas = document.getElementById('particleCanvas');
+    const c = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const mouse = {
+      x: null,
+      y: null,
+      radius: 180,
+      active: false
+    };
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.active = true;
+    });
+
+    window.addEventListener('mouseleave', () => {
+      mouse.active = false;
+    });
+
+    class SlowGravityParticle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2.5 + 1.2;
+        this.color = ['#cbd5e1', '#818cf8', '#38bdf8', '#2dd4bf'][Math.floor(Math.random() * 4)];
+        
+        // Very gentle baseline movement
+        this.vx = (Math.random() - 0.5) * 0.25;
+        this.vy = (Math.random() - 0.5) * 0.25;
+        
+        // Low density factor for subtle, slow pull
+        this.easeFactor = Math.random() * 0.015 + 0.005;
+      }
+
+      draw() {
+        c.beginPath();
+        c.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        c.fillStyle = this.color;
+        c.globalAlpha = 0.5;
+        c.fill();
+      }
+
+      update() {
+        // Natural Slow Drift
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+        // Slow Magnetic Constellation Attraction
+        if (mouse.active && mouse.x !== null) {
+          let dx = mouse.x - this.x;
+          let dy = mouse.y - this.y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < mouse.radius) {
+            // Gentle lerp toward mouse instead of rapid acceleration
+            this.x += dx * this.easeFactor;
+            this.y += dy * this.easeFactor;
+          }
+        }
+      }
+    }
+
+    const particleArray = Array.from({ length: 65 }, () => new SlowGravityParticle());
+
+    function connectParticles() {
+      for (let a = 0; a < particleArray.length; a++) {
+        for (let b = a; b < particleArray.length; b++) {
+          let dx = particleArray[a].x - particleArray[b].x;
+          let dy = particleArray[a].y - particleArray[b].y;
+          let dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 100) {
+            c.beginPath();
+            c.strokeStyle = '#cbd5e1';
+            c.globalAlpha = (1 - dist / 100) * 0.22;
+            c.lineWidth = 0.7;
+            c.moveTo(particleArray[a].x, particleArray[a].y);
+            c.lineTo(particleArray[b].x, particleArray[b].y);
+            c.stroke();
+          }
+        }
+      }
+    }
+
+    function animateParticles() {
+      c.clearRect(0, 0, canvas.width, canvas.height);
+      particleArray.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      connectParticles();
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+  </script>
+</body>
+</html>
